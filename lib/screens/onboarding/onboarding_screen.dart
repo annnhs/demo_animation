@@ -1,8 +1,9 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+
+import 'components/animated_btn.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -52,7 +53,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Spacer(),
                   SizedBox(
                     width: 260,
                     child: Column(
@@ -72,8 +75,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ],
                     ),
                   ),
+                  const Spacer(flex: 2,),
                   AnimateBtn(
                     btnAnimationController: _btnAnimationController,
+                    press: () {
+                      _btnAnimationController.isActive = true;
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      'Purchase includes access to 30+ courses, 240+ premium tutorials, 120+ hours of videos, source files and certificates',
+                    ),
                   ),
                 ],
               ),
@@ -84,51 +97,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 }
-
-class AnimateBtn extends StatelessWidget {
-  const AnimateBtn({
-    Key? key,
-    required RiveAnimationController btnAnimationController,
-  }) : _btnAnimationController = btnAnimationController,
-        super(key: key);
-
-  final RiveAnimationController _btnAnimationController;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _btnAnimationController.isActive = true;
-      },
-      child: SizedBox(
-        height: 64,
-        width: 260,
-        child: Stack(
-          children: [
-            RiveAnimation.asset(
-              'assets/RiveAssets/button.riv',
-              controllers: [
-                _btnAnimationController
-              ],
-            ),
-            Positioned.fill(
-              top: 8,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(CupertinoIcons.arrow_right),
-                  SizedBox(width: 8,),
-                  Text(
-                    'Start the course',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
