@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rive/rive.dart';
 
+import '../../../entry_point.dart';
+import '../../../utils/rive_utils.dart';
+
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
 
@@ -21,14 +24,6 @@ class _SignInFormState extends State<SignInForm> {
   late SMITrigger reset;
 
   late SMITrigger confetti;
-
-  StateMachineController getRiveController (Artboard artboard) {
-    StateMachineController? controller = StateMachineController.fromArtboard(artboard, "State Machine 1");
-
-    artboard.addController(controller!);
-
-    return controller;
-  }
 
   void signIn(BuildContext context) {
     // 1. 먼저 버튼 누르면 로딩 표시
@@ -50,7 +45,18 @@ class _SignInFormState extends State<SignInForm> {
                 isShowLoading = false;
               });
               confetti.fire();
-              // TODO: 다음 화면으로 이동
+              // 다음 화면으로 이동
+              Future.delayed(
+                Duration(seconds: 1),
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EntryPoint(),
+                    ),
+                  );
+                },
+              );
             },
           );
         } else {
@@ -147,11 +153,11 @@ class _SignInFormState extends State<SignInForm> {
                     minimumSize: const Size(double.infinity, 56),
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                    )),
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(25),
+                          bottomLeft: Radius.circular(25),
+                          bottomRight: Radius.circular(25),
+                        )),
                   ),
                   icon: const Icon(
                     CupertinoIcons.arrow_right,
@@ -169,7 +175,7 @@ class _SignInFormState extends State<SignInForm> {
           child: RiveAnimation.asset(
             'assets/RiveAssets/check.riv',
             onInit: (artboard) {
-              StateMachineController controller = getRiveController(artboard);
+              StateMachineController controller = RiveUtils.getRiveController(artboard);
               check = controller.findSMI('Check') as SMITrigger;
               error = controller.findSMI('Error') as SMITrigger;
               reset = controller.findSMI('Reset') as SMITrigger;
@@ -183,9 +189,10 @@ class _SignInFormState extends State<SignInForm> {
             child: RiveAnimation.asset(
               'assets/RiveAssets/confetti.riv',
               onInit: (artboard) {
-                StateMachineController controller = getRiveController(artboard);
+                StateMachineController controller = RiveUtils.getRiveController(artboard);
 
-                confetti = controller.findSMI('Trigger explosion') as SMITrigger;
+                confetti =
+                controller.findSMI('Trigger explosion') as SMITrigger;
               },
             ),
           ),
@@ -196,7 +203,8 @@ class _SignInFormState extends State<SignInForm> {
 }
 
 class CustomPositioned extends StatelessWidget {
-  const CustomPositioned({Key? key, required this.child, this.size = 100}) : super(key: key);
+  const CustomPositioned({Key? key, required this.child, this.size = 100})
+      : super(key: key);
 
   final Widget child;
   final double size;
