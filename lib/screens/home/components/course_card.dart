@@ -19,14 +19,13 @@ class CourseCard extends StatelessWidget {
       width: 260,
       decoration: BoxDecoration(
         color: course.bgColor,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   course.title,
@@ -58,7 +57,7 @@ class CourseCard extends StatelessWidget {
                 Row(
                   children: List.generate(
                     3,
-                        (index) => Transform.translate(
+                    (index) => Transform.translate(
                       offset: Offset((-10 * index).toDouble(), 0),
                       child: CircleAvatar(
                         radius: 20,
